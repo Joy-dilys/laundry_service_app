@@ -1,17 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Business Profile</title>
-</head>
-<body>
-    <h2>{{ 'Edit' if business else 'Create' }} Business Profile</h2>
-    <form method="POST">
-        <input name="name" value="{{ business.name if business else '' }}" placeholder="Business Name" required><br>
-        <input name="phone" value="{{ business.phone if business else '' }}" placeholder="Phone Number"><br>
-        <input name="address" value="{{ business.address if business else '' }}" placeholder="Address"><br>
-        <textarea name="description" placeholder="Description">{{ business.description if business else '' }}</textarea><br>
-        <button type="submit">Save Profile</button>
-    </form>
-    <a href="/business_dashboard">Back to Dashboard</a>
-</body>
-</html>
+<!-- {% extends 'dashboard_layout.html' %}
+
+{% block title %}Edit Business Profile{% endblock %}
+
+{% block content %}
+<div class="main-page-content">
+    <div class="main-content-wrapper">
+        <!-- Sidebar (optional if needed) -->
+        <div class="dashboard-sidebar">
+            <div class="action-links">
+                <a href="/business_dashboard">Dashboard</a>
+                <a href="#business-profile" class="active">Edit Business Profile</a>
+                <a href="#add-service">Add New Service</a>
+                <a href="#manage-services">Manage My Services</a>
+                <a href="#client-orders">View Client Orders</a>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="dashboard-content">
+            <h2>{{ 'Edit' if business else 'Create' }} Business Profile</h2>
+
+            <form method="POST" class="profile-form">
+                <div class="form-group">
+                    <label for="name">Business Name:</label>
+                    <input type="text" id="name" name="name" value="{{ business.name if business else '' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" value="{{ business.phone if business else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" value="{{ business.address if business else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4">{{ business.description if business else '' }}</textarea>
+                </div>
+
+                <button type="submit" class="action-button">Save Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} -->

@@ -161,15 +161,26 @@ def business_dashboard():
         return redirect(url_for('login'))
 
     business = Business.query.filter_by(owner_id=session['user_id']).first()
-    
-    # Fetch orders relevant to this business's services
-    # This involves joining Service and Order tables
+
     if business:
-        business_orders = Order.query.join(Service).filter(Service.business_id == business.id).order_by(Order.created_at.desc()).all()
+        # Get services for this business
+        services = Service.query.filter_by(business_id=business.id).order_by(Service.id.desc()).all()
+
+        # Get orders for this business
+        business_orders = Order.query.join(Service).filter(
+            Service.business_id == business.id
+        ).order_by(Order.created_at.desc()).all()
     else:
-        business_orders = [] # No business profile yet, so no orders
-        
-    return render_template('business_dashboard.html', business=business, orders=business_orders)
+        services = []
+        business_orders = []
+
+    return render_template(
+        'business_dashboard.html',
+        business=business,
+        orders=business_orders,
+        services=services
+    )
+
 
 
 # --- Business Profile Route ---
@@ -234,6 +245,8 @@ def add_service():
         name = request.form['name']
         description = request.form['description']
         price = request.form['price']
+        category = request.form.get('category')  # grab the field
+
 
         try:
             price = float(price)
@@ -243,7 +256,7 @@ def add_service():
                 flash(f"Error: You already have a service named '{name}'.", "danger")
                 return render_template('add_service.html', business=business)
 
-            new_service = Service(name=name, description=description, price=price, business_id=business.id)
+            new_service = Service(name=name, description=description, price=price, business_id=business.id, category=category)  # Include category
             db.session.add(new_service)
             db.session.commit()
             flash("Service added successfully!", "success")

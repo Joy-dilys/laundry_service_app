@@ -463,4 +463,50 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
 }
+.profile-form {
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #003366;
+}
+
+input[type="text"],
+input[type="tel"],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.services-table th,
+.services-table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.services-table th {
+    background-color: #003366;
+    color: #fff;
+    font-weight: 600;
+}
+
+.services-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
 

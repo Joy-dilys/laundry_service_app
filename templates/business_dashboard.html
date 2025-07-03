@@ -18,37 +18,110 @@
 
         <!-- Main Content Panels -->
         <div class="dashboard-content">
+            <!-- Dashboard Welcome -->
             <div id="dashboard-home" class="dashboard-section active">
                 <h2>Welcome, {{ session.username }}!</h2>
                 <hr>
-                <h3>Your Business Profile</h3>
-                {% if business %}
-                    <p><strong>Name:</strong> {{ business.name }}</p>
-                    <p><strong>Phone:</strong> {{ business.phone }}</p>
-                    <p><strong>Address:</strong> {{ business.address }}</p>
-                    <p><strong>Description:</strong> {{ business.description }}</p>
-                {% else %}
-                    <p>You don't have a business profile yet.
-                        <a href="#business-profile">Create one now!</a>
-                    </p>
-                {% endif %}
+                <p>Use the sidebar to manage your business account and orders.</p>
             </div>
 
+            Business Profile Form
             <div id="business-profile" class="dashboard-section">
-                <h2>Edit Business Profile</h2>
-                <p>[Insert business profile form or summary here]</p>
+                <h2>{{ 'Edit' if business else 'Create' }} Business Profile</h2>
+
+                <form method="POST" action="{{ url_for('business_profile') }}" class="profile-form">
+                    <div class="form-group">
+                        <label for="name">Business Name:</label>
+                        <input type="text" id="name" name="name" value="{{ business.name if business else '' }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" value="{{ business.phone if business else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" value="{{ business.address if business else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="4">{{ business.description if business else '' }}</textarea>
+                    </div>
+
+                    <button type="submit" class="action-button">Save Profile</button>
+                </form>
             </div>
 
-            <div id="add-service" class="dashboard-section">
-                <h2>Add New Service</h2>
-                <p>[Insert form for adding a service here]</p>
-            </div>
+            <!-- Add Service -->
+           <div id="add-service" class="dashboard-section">
+    <h2>Add New Service</h2>
 
+    <form method="POST" action="{{ url_for('add_service') }}" class="profile-form">
+        <div class="form-group">
+            <label for="service_name">Service Name:</label>
+            <input type="text" id="service_name" name="name" placeholder="e.g. Wash & Fold" required>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price per Unit (KES):</label>
+            <input type="number" id="price" name="price" step="0.01" placeholder="e.g. 150.00" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Service Description:</label>
+            <textarea id="description" name="description" rows="4" placeholder="Describe what this service includes..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" placeholder="e.g. Dry Cleaning, Ironing (optional)">
+        </div>
+
+        <button type="submit" class="action-button">Add Service</button>
+    </form>
+</div>
+
+
+            <!-- Manage Services -->
             <div id="manage-services" class="dashboard-section">
                 <h2>Manage My Services</h2>
-                <p>[Insert list/table of services here]</p>
+                {% if services %}
+    <table class="services-table">
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>Price (KES)</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ "%.2f"|format(service.price) }}</td>
+                <td>{{ service.description }}</td>
+                <td>{{ service.category if service.category else '—' }}</td>
+                <td>
+                    <a href="{{ url_for('add_service') }}" class="action-button">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_service', service_id=service.id) }}" style="display:none;">
+                        <button type="submit" class="action-button delete-button" onclick="return confirm('Delete this service?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No services found. Add some from the “Add New Service” tab.</p>
+{% endif %}
+
             </div>
 
+            <!-- Client Orders -->
             <div id="client-orders" class="dashboard-section">
                 <h2>Incoming Orders</h2>
                 {% if orders %}

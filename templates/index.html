@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Laundry Solutions - Home</title>
+    {# Link to the external stylesheet #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {# --- Flash Messages --- #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <header class="header">
+        <div class="logo">
+            {# Replace with your actual logo if you have one. Ensure it's in the static folder. #}
+            <img src="{{ url_for('static', filename='our_logo.png') }}" alt="Our Logo">
+        </div>
+        <nav class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            {# Dropdowns are complex with pure CSS/HTML. For simplicity, these are just links #}
+            <a href="#">About Us</a> 
+            <a href="#">Laundry Solutions</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </nav>
+       
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>DISCOVER LAUNDRY <br> MANAGEMENT SOFTWARE <br> SOLUTIONS</h1>
+            <p>Our productivity solutions are embraced by laundry operations of all sizes and across multiple industries - from private business to government agencies, from healthcare to accommodation and industrial. Our solutions work.</p>
+            {# You might link this to a signup or a "learn more" page #}
+            <a href="{{ url_for('signup') }}" class="hero-button">Get Started Now</a>
+        </section>
+
+        {# Example content sections - you can expand these #}
+        <section class="content-section">
+            <h2>Why Choose Laundry Connect?</h2>
+            <p>Laundry Connect is your smart, reliable solution for hassle-free laundry services. We connect you with trusted local laundromats and dry cleaners—all at your fingertips.
+
+Convenience at its Best – Schedule pickups and deliveries with just a few taps.
+ Trusted Businesses – All laundry partners are verified for quality and reliability.
+ Real-Time Tracking – Stay updated on your laundry status, from pickup to delivery.
+ Affordable & Transparent Pricing – No hidden charges, just clean clothes at fair prices.
+ Eco-Friendly Options – Choose services that care for your clothes and the environment.</p>
+        </section>
+
+        <section class="content-section" style="background-color: #e9ecef;">
+            <h2>Our Services</h2>
+            <p>Here you can list key features or types of laundry services managed by the software.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; {{ now().year }}  Laundry Productivity. All rights reserved.</p>
+    </footer>
+</body>
+</html>

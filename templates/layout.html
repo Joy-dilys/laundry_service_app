@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Daily Clean Laundry Management{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            {# Make sure your logo file is in the static folder, e.g., 'daily_clean_logo.png' #}
+            <img src="{{ url_for('static', filename='our_logo.png') }}">
+        </div>
+
+        {# Auth Button Container (moved here for responsive reordering) #}
+        <div class="auth-buttons-container">
+            {% if session.get('user_id') %}
+                {# Redirect based on role if logged in #}
+                {% if session.get('role') == 'business' %}
+                    <a href="{{ url_for('business_dashboard') }}" class="auth-button">Business Dashboard</a>
+                {% elif session.get('role') == 'client' %}
+                    <a href="{{ url_for('client_dashboard') }}" class="auth-button">Client Dashboard</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="auth-button" style="background-color: #dc3545;">Logout</a>
+            
+            {% endif %}
+        </div>
+
+        {# Hamburger Toggle Button #}
+        <div class="nav-toggle" id="navToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Laundry Solutions</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    {# --- Flash Messages --- #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        {# Using datetime from Python if passed to render_template, otherwise hardcode for simplicity #}
+        <p>&copy; {% if now %}{{ now().year }}{% else %}2025{% endif %} Daily Clean Laundry Management. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            navToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

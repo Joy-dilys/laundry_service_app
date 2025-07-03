@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Business Profile</title>
+</head>
+<body>
+    <h2>{{ 'Edit' if business else 'Create' }} Business Profile</h2>
+    <form method="POST">
+        <input name="name" value="{{ business.name if business else '' }}" placeholder="Business Name" required><br>
+        <input name="phone" value="{{ business.phone if business else '' }}" placeholder="Phone Number"><br>
+        <input name="address" value="{{ business.address if business else '' }}" placeholder="Address"><br>
+        <textarea name="description" placeholder="Description">{{ business.description if business else '' }}</textarea><br>
+        <button type="submit">Save Profile</button>
+    </form>
+    <a href="/business_dashboard">Back to Dashboard</a>
+</body>
+</html>

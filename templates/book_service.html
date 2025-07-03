@@ -1,0 +1,17 @@
+<h2>Book Service: {{ service.name }}</h2>
+<form method="POST">
+    <label>Pickup Time:</label><br>
+    <input type="datetime-local" name="pickup_time" required><br>
+    
+    <label>Delivery Address:</label><br>
+    <input type="text" name="address" required><br>
+    
+    <label>Delivery Option:</label><br>
+    <select name="delivery_option" required>
+        <option value="pickup">Pickup & Drop-off</option>
+        <option value="self-drop">Self Drop</option>
+    </select><br>
+
+    <button type="submit">Place Order</button>
+</form>
+<a href="/services">Back</a>

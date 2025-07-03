@@ -1,0 +1,13 @@
+<h2>My Services</h2>
+<a href="/add_service">Add New Service</a>
+<ul>
+    {% for service in services %}
+        <li>
+            <strong>{{ service.name }}</strong> - {{ service.price }} KES<br>
+            {{ service.description }}<br>
+            <a href="/delete_service/{{ service.id }}">Delete</a>
+        </li>
+    {% else %}
+        <p>No services listed yet.</p>
+    {% endfor %}
+</ul>

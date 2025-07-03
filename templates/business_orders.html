@@ -1,0 +1,22 @@
+<h2>Incoming Orders</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            Service: {{ order.service.name }}<br>
+            Client: {{ order.client.username }}<br>
+            Pickup: {{ order.pickup_time }} | {{ order.delivery_option }}<br>
+            Address: {{ order.address }}<br>
+            Status: {{ order.status }}<br>
+            <form method="POST" action="/update_order/{{ order.id }}">
+                <select name="status">
+                    <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </li>
+    {% else %}
+        <p>No orders yet.</p>
+    {% endfor %}
+</ul>

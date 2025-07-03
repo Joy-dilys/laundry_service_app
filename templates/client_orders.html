@@ -1,0 +1,14 @@
+<h2>My Orders</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            Service: {{ order.service.name }}<br>
+            Pickup Time: {{ order.pickup_time }}<br>
+            Delivery Option: {{ order.delivery_option }}<br>
+            Status: <strong>{{ order.status }}</strong><br>
+            Business: {{ order.business.name }}<br>
+        </li>
+    {% else %}
+        <p>You have not placed any orders yet.</p>
+    {% endfor %}
+</ul>

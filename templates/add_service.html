@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Service</title>
+    <style>
+        /* Basic styling for better readability - you can move this to a separate CSS file */
+        body { font-family: sans-serif; margin: 20px; }
+        nav a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        nav a:hover { text-decoration: underline; }
+        h1, h2, h3 { color: #333; }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        /* Flash message colors */
+        .flash-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flash-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flash-warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .flash-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        
+        form div { margin-bottom: 15px; } /* Increased spacing for form fields */
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold; 
+            color: #555;
+        }
+        input[type="text"], 
+        input[type="number"], 
+        textarea {
+            width: 100%; /* Make inputs take full width of their container */
+            max-width: 350px; /* Limit max width for better aesthetics */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        textarea { 
+            resize: vertical; 
+            min-height: 80px; 
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745; /* Green for add/create actions */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { 
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    {# --- Flash Messages --- #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Add New Laundry Service</h2>
+
+    {# --- Business Navigation --- #}
+    <nav>
+        <a href="{{ url_for('business_dashboard') }}">Business Dashboard</a> |
+        <a href="{{ url_for('manage_services') }}">Manage My Services</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+
+    <hr>
+
+    {# Check if business profile exists before allowing service addition #}
+    {% if business %}
+        <p>Adding a service for **{{ business.name }}**</p>
+        <form method="POST">
+            <div>
+                <label for="name">Service Name:</label>
+                <input type="text" id="name" name="name" placeholder="e.g., Wash & Fold, Dry Cleaning" required>
+            </div>
+            <div>
+                <label for="description">Description (Optional):</label>
+                <textarea id="description" name="description" placeholder="A brief description of the service..."></textarea>
+            </div>
+            <div>
+                <label for="price">Price (KES):</label>
+                <input type="number" id="price" name="price" placeholder="e.g., 500.00" step="0.01" min="0" required>
+            </div>
+            <button type="submit">Add Service</button>
+        </form>
+    {% else %}
+        <p>You need to create your business profile first before you can add services. <a href="{{ url_for('business_profile') }}">Create Business Profile</a></p>
+    {% endif %}
+
+</body>
+</html>

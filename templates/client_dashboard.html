@@ -1,0 +1,46 @@
+{% extends 'client_layout.html' %}
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="main-page-content">
+  <div class="main-content-wrapper">
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+      <div class="action-links">
+        <a href="/services" class="active">Browse Services</a>
+        <a href="/client_orders">My Orders</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="dashboard-content">
+      <h2>Welcome, {{ session.username }}</h2>
+      <hr>
+
+      <form method="get" action="/services" class="search-form">
+        <input type="text" name="q" placeholder="Search service name">
+        <input type="text" name="location" placeholder="Search by location">
+        <button type="submit" class="action-button">Search</button>
+      </form>
+
+      <h3>Available Laundry Services</h3>
+      {% if services %}
+        <div class="card-list">
+          {% for service in services %}
+            <div class="service-card">
+              <h4>{{ service.name }}</h4>
+              <p><strong>{{ service.price }} KES</strong></p>
+              <p>{{ service.description }}</p>
+              <p>From: {{ service.business.name }} ({{ service.business.address }})</p>
+              <a href="/book/{{ service.id }}" class="action-button">Book Now</a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No services found.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

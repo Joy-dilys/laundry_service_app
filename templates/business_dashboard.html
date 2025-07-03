@@ -1,0 +1,128 @@
+{% extends 'dashboard_layout.html' %}
+
+{% block title %}Business Dashboard{% endblock %}
+
+{% block content %}
+<div class="main-page-content">
+    <div class="main-content-wrapper">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar">
+            <div class="action-links">
+                <a href="#dashboard-home" class="active">Dashboard</a>
+                <a href="#business-profile">Edit Business Profile</a>
+                <a href="#add-service">Add New Service</a>
+                <a href="#manage-services">Manage My Services</a>
+                <a href="#client-orders">View Client Orders</a>
+            </div>
+        </div>
+
+        <!-- Main Content Panels -->
+        <div class="dashboard-content">
+            <div id="dashboard-home" class="dashboard-section active">
+                <h2>Welcome, {{ session.username }}!</h2>
+                <hr>
+                <h3>Your Business Profile</h3>
+                {% if business %}
+                    <p><strong>Name:</strong> {{ business.name }}</p>
+                    <p><strong>Phone:</strong> {{ business.phone }}</p>
+                    <p><strong>Address:</strong> {{ business.address }}</p>
+                    <p><strong>Description:</strong> {{ business.description }}</p>
+                {% else %}
+                    <p>You don't have a business profile yet.
+                        <a href="#business-profile">Create one now!</a>
+                    </p>
+                {% endif %}
+            </div>
+
+            <div id="business-profile" class="dashboard-section">
+                <h2>Edit Business Profile</h2>
+                <p>[Insert business profile form or summary here]</p>
+            </div>
+
+            <div id="add-service" class="dashboard-section">
+                <h2>Add New Service</h2>
+                <p>[Insert form for adding a service here]</p>
+            </div>
+
+            <div id="manage-services" class="dashboard-section">
+                <h2>Manage My Services</h2>
+                <p>[Insert list/table of services here]</p>
+            </div>
+
+            <div id="client-orders" class="dashboard-section">
+                <h2>Incoming Orders</h2>
+                {% if orders %}
+                    <ul>
+                        {% for order in orders %}
+                            <li>
+                                <strong>Order ID:</strong> {{ order.id }}<br>
+                                <strong>Client:</strong> {{ order.client.username }} ({{ order.client.email }})<br>
+                                <strong>Service:</strong> {{ order.service.name }} ({{ order.quantity }} units)<br>
+                                <strong>Price per unit:</strong> {{ "%.2f"|format(order.service.price) }} KES<br>
+                                <strong>Total:</strong> {{ "%.2f"|format(order.total_price) }} KES<br>
+                                <strong>Pickup Date/Time:</strong> {{ order.pickup_date.strftime('%Y-%m-%d %H:%M') }}<br>
+                                <strong>Pickup Address:</strong> {{ order.pickup_address }}<br>
+                                <strong>Delivery Address:</strong> {{ order.delivery_address }}<br>
+                                <strong>Notes:</strong> {{ order.notes if order.notes else 'N/A' }}<br>
+                                <span class="order-status-{{ order.status.lower().replace(' ', '-') }}">
+                                    Status: {{ order.status }}
+                                </span><br>
+                                <small>Placed On: {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</small><br><br>
+
+                                {% if order.status == 'Pending' %}
+                                    <form action="{{ url_for('update_order_status', order_id=order.id, action='accept') }}" method="POST" style="display:inline-block; margin-right: 5px;">
+                                        <button type="submit" class="action-button">Accept Order</button>
+                                    </form>
+                                    <form action="{{ url_for('update_order_status', order_id=order.id, action='decline') }}" method="POST" style="display:inline-block;">
+                                        <button type="submit" class="action-button delete-button">Decline Order</button>
+                                    </form>
+                                {% elif order.status == 'Accepted' %}
+                                    <form action="{{ url_for('update_order_status', order_id=order.id, action='in_progress') }}" method="POST">
+                                        <button type="submit" class="action-button">Mark In Progress</button>
+                                    </form>
+                                {% elif order.status == 'In Progress' %}
+                                    <form action="{{ url_for('update_order_status', order_id=order.id, action='ready') }}" method="POST">
+                                        <button type="submit" class="action-button">Mark Ready for Pickup</button>
+                                    </form>
+                                {% elif order.status == 'Ready for Pickup/Delivery' %}
+                                    <form action="{{ url_for('update_order_status', order_id=order.id, action='complete') }}" method="POST">
+                                        <button type="submit" class="action-button">Mark as Completed</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No new orders at the moment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const links = document.querySelectorAll('.dashboard-sidebar a');
+        const sections = document.querySelectorAll('.dashboard-section');
+
+        links.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Activate clicked tab
+                links.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show target section
+                const target = this.getAttribute('href').replace('#', '');
+                sections.forEach(s => {
+                    s.classList.remove('active');
+                    if (s.id === target) s.classList.add('active');
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
